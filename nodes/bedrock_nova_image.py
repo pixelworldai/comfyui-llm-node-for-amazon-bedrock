@@ -17,7 +17,8 @@ DEBUG_MODE = False
 # Rely on ComfyUI Paths
 comfyui_root = folder_paths.base_path
 output_directory = f"{comfyui_root}/output"
-bedrock = boto3.client(service_name="bedrock-runtime", region_name="us-east-1")
+from .session import get_client
+bedrock = get_client(service_name="bedrock-runtime")
 
 def encode_image(image_tensor: torch.Tensor) -> str:
     """Convert ComfyUI image tensor to Base64 string"""

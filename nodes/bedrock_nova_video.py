@@ -17,10 +17,12 @@ def get_default_region():
     return session.region_name
 
 def get_account_id():
-    sts_client = boto3.client('sts')
+    from .session import get_client
+    sts_client = get_client('sts')
     return sts_client.get_caller_identity().get('Account')
 
-s3_client = boto3.client("s3", region_name=get_default_region())
+from .session import get_client
+s3_client = get_client("s3")
 bedrock_runtime_client = get_client(service_name="bedrock-runtime")
 region = get_default_region()
 account_id = get_account_id()
@@ -62,7 +64,8 @@ def download_video_for_invocation_arn(invocation_arn, bucket_name, destination_f
     os.makedirs(output_folder, exist_ok=True)
 
     # Create an S3 client
-    s3 = boto3.client("s3")
+    from .session import get_client
+    s3 = get_client("s3")
 
     # List objects in the specified folder
     response = s3.list_objects_v2(Bucket=bucket_name, Prefix=invocation_id)

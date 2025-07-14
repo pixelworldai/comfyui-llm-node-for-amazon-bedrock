@@ -14,11 +14,12 @@ def get_default_region():
     return "us-west-2"  # Use us-west-2 for Luma AI Ray 2
 
 
-s3_client = boto3.client("s3", region_name=get_default_region())
+from .session import get_client
+s3_client = get_client("s3")
 
 
 def get_account_id():
-    sts_client = boto3.client("sts", region_name=get_default_region())
+    sts_client = get_client("sts")
     return sts_client.get_caller_identity().get("Account")
 
 
@@ -47,7 +48,8 @@ def download_video_for_invocation_arn(invocation_arn, bucket_name, destination_f
     output_folder = os.path.abspath(destination_folder)
     local_file_path = os.path.join(output_folder, file_name)
     os.makedirs(output_folder, exist_ok=True)
-    s3 = boto3.client("s3", region_name=get_default_region())
+    from .session import get_client
+    s3 = get_client("s3")
     response = s3.list_objects_v2(Bucket=bucket_name, Prefix=invocation_id)
     for obj in response.get("Contents", []):
         object_key = obj["Key"]
@@ -83,9 +85,7 @@ def save_completed_job(job, output_folder="output"):
     return localPath
 
 
-bedrock_runtime_client = boto3.client(
-    "bedrock-runtime", region_name=get_default_region()
-)
+bedrock_runtime_client = get_client("bedrock-runtime")
 region = get_default_region()
 account_id = get_account_id()
 

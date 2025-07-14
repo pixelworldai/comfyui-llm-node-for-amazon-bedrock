@@ -16,7 +16,8 @@ DEBUG_MODE = False
 # Rely on ComfyUI Paths
 comfyui_root = folder_paths.base_path
 output_directory = f"{comfyui_root}/output"
-bedrock = boto3.client(service_name="bedrock-runtime", region_name="us-west-2")
+from .session import get_client
+bedrock = get_client(service_name="bedrock-runtime")
 
 # Model IDs
 MODEL_ID_SD3_LARGE = "stability.sd3-large-v1:0"

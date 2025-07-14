@@ -34,11 +34,24 @@ git clone https://github.com/pythongosssss/ComfyUI-Custom-Scripts.git
 ![](./assets/base_models_us-east-2.png)
 
 
-3. You need configure credential for your environments with IAM Role or AKSK.
+3. You need to configure credentials for your environment. There are several options:
 
-- IAM Role
+### Option 1: Config.ini File (Easy)
 
-If you are runing ComfyUI on your aws instance, you could use IAM role to control the policy to access to Bedrock service without AKSK configuration.
+Create a `config.ini` file in the custom_nodes directory with your AWS credentials:
+
+```ini
+[aws]
+access_key_id = YOUR_ACCESS_KEY_ID
+secret_access_key = YOUR_SECRET_ACCESS_KEY
+region = us-east-1
+```
+
+You can copy `config.ini.example` and edit it with your actual credentials.
+
+### Option 2: IAM Role (AWS Instances)
+
+If you are running ComfyUI on an AWS instance, you can use IAM role to control the policy to access to Bedrock service without credential configuration.
 
 Open the IAM role console of your running instance, and attach `AmazonBedrockFullAccess` policy to your role.
 
@@ -57,9 +70,9 @@ Alternatively, you can create an inline policy to your role like this:
 }
 ```
 
-- AKSK (AccessKeySecretKey)
+### Option 3: AWS CLI Credentials
 
-You need to make sure the AKSK user has same policy as the IAM role described before. You can use the aws command tool to configure your credentials file:
+You can use the aws command tool to configure your credentials file:
 
 ```
 aws configure
